@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import * as firebase from "firebase";
 import { TodoModel } from '../models/todo.model';
 import "../rxjs.operators";
+import {FirebaseConfig} from "./firebase.config";
 
 @Injectable()
 export class TodoStoreService {
@@ -11,13 +12,7 @@ export class TodoStoreService {
     private provider;
 
 	constructor() {
-        let config = {
-            apiKey: "AIzaSyB1tptv7puWh_09MZadQCQa-5K45sKpdO8",
-            authDomain: "movie-list-9dba0.firebaseapp.com",
-            databaseURL: "wss://movie-list-9dba0.firebaseio.com",
-            storageBucket: "movie-list-9dba0.appspot.com",
-        };
-        firebase.initializeApp(config);
+        firebase.initializeApp(FirebaseConfig);
 
         this.provider = new firebase.auth.GoogleAuthProvider();
         this.provider.addScope('https://www.googleapis.com/auth/plus.login');

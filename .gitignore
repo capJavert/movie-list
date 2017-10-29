@@ -2,3 +2,4 @@ node_modules
 dist
 .idea
 .DS_Store
+src/app/services/firebase.config.ts
