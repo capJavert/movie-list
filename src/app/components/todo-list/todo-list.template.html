@@ -1,0 +1,22 @@
+<section class="todoapp">
+    <todo-header></todo-header>
+
+    <div *ngIf="isLoading" id="loader"></div>
+
+    <section *ngIf="isAuth" class="main">
+        <input class="toggle-all" type="checkbox" #toggleall [checked]="allCompleted()" (click)="setAllTo(toggleall)">
+        <ul class="todo-list">
+            <todo-item *ngFor="let todo of todos" [todo]="todo" (itemRemoved)="remove($event)" (itemModified)="update($event)"></todo-item>
+        </ul>
+    </section>
+    <todo-footer></todo-footer>
+</section>
+
+<section *ngIf="!isAuth" id="login-area">
+    <img (click)="login()" src="assets/img/btn_google_signin_light_normal_web.png" alt="Sign in" />
+</section>
+
+<footer *ngIf="isAuth" class="info">
+    <p>Double-click to edit a movie</p>
+</footer>
+

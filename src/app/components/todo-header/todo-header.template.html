@@ -1,0 +1,5 @@
+<header class="header">
+    <h1>Movie list</h1>
+    <input *ngIf="!isAuth" disabled class="new-todo" placeholder="Add new movie.." [(ngModel)]="newTodo" autofocus="" (keyup.enter)="addTodo()">
+    <input *ngIf="isAuth" class="new-todo" placeholder="Add new movie.." [(ngModel)]="newTodo" autofocus="" (keyup.enter)="addTodo()">
+</header>
