@@ -382,6 +382,17 @@ label[for='toggle-all'] {
 	padding: 1px 1px 1px 2px;
 	border-radius: 2px;
 	cursor: pointer;
+	text-decoration: none;
+}
+
+.movie-link:active,
+.movie-link:hover,
+.movie-link:visited {
+	color: #000000;
+}
+
+ {
+
 }
 
 .todo-list li .destroy:hover {

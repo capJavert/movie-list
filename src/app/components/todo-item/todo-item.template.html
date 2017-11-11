@@ -3,7 +3,7 @@
         <input id="movie-input" class="toggle" type="checkbox" (click)="toggleCompletion()" [checked]="todo.completed">
         <label for="movie-input" (dblclick)="edit(todo)">
             {{ todo.title | trim }}
-            <a class="movie-link" *ngIf="todo.link" (href)="todo.link">IMDb</a>
+            <a class="movie-link" *ngIf="todo.link" [href]="todo.link">IMDb</a>
         </label>
         <button class="destroy" (click)="remove()"></button>
     </div>
