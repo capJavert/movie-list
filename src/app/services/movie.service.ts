@@ -5,7 +5,7 @@ import { DOMParser } from 'xmldom';
 
 @Injectable()
 export class MovieService {
-    private baseUrl = "http://www.theimdbapi.org/api";
+    private baseUrl = "https://www.theimdbapi.org/api";
 
     constructor (private http: Http) {
 
