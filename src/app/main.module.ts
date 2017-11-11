@@ -14,6 +14,7 @@ import {
 } from './components';
 import { routes } from './routes';
 import {TrimPipe} from "./components/pipes/trim/trim.pipe";
+import {MovieService} from "./services/movie.service";
 
 @NgModule({
 	bootstrap: [AppComponent],
@@ -34,7 +35,8 @@ import {TrimPipe} from "./components/pipes/trim/trim.pipe";
 		}),
 	],
 	providers: [
-		TodoStoreService
+		TodoStoreService,
+		MovieService
 	]
 })
 export class MainModule {}

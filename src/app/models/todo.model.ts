@@ -4,6 +4,7 @@ export class TodoModel {
 	completed;
 	title;
 	uid;
+	link = null;
 
 	setTitle(title) {
 		this.title = title.trim();

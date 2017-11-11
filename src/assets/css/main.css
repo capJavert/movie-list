@@ -365,11 +365,23 @@ label[for='toggle-all'] {
 	bottom: 0;
 	width: 40px;
 	height: 40px;
-	margin: auto 0;
+	margin: auto 0 11px 0;
 	font-size: 30px;
 	color: #cc9a9a;
-	margin-bottom: 11px;
 	transition: color 0.2s ease-out;
+	cursor: pointer;
+}
+
+.movie-link {
+	margin-top: 30px;
+	font-size: 12px;
+	background: #ffd606;
+	font-weight: 700;
+	color: #000000;
+	border: 1px solid #000000;
+	padding: 1px 1px 1px 2px;
+	border-radius: 2px;
+	cursor: pointer;
 }
 
 .todo-list li .destroy:hover {
