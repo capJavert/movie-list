@@ -23,24 +23,32 @@ export class TodoStoreService {
     }
 
     async list() {
-        await firebase.database().ref('todos').once('value').then((snapshot) => {
-            if(snapshot.val() !== null) {
-                let persistedTodos = snapshot.val();
+        await firebase.database().ref('todos').once('value', (snapshot) => {
+            this.loadList(snapshot)
+        });
 
-                this.todos = persistedTodos.map((todo) => {
-                    let ret = new TodoModel(todo.title);
-                    ret.completed = todo.completed;
-                    if(todo.hasOwnProperty('websiteRef')) {
-                        ret.websiteRef = todo.websiteRef;
-                    }
-                    ret.uid = todo.uid;
-                    return ret;
-                });
-
-                this.persist();
-            }
+        await firebase.database().ref('todos').on('value', (snapshot) => {
+            this.loadList(snapshot)
         });
     }
+
+    private loadList(snapshot) {
+        if(snapshot.val() !== null) {
+            let persistedTodos = snapshot.val();
+
+            this.todos = persistedTodos.map((todo) => {
+                let ret = new TodoModel(todo.title);
+                ret.completed = todo.completed;
+                if(todo.hasOwnProperty('websiteRef')) {
+                    ret.websiteRef = todo.websiteRef;
+                }
+                ret.uid = todo.uid;
+                return ret;
+            });
+
+            this.persist();
+        }
+	}
 
 	get(state) {
 		return this.todos.filter((todo) => todo.completed === state.completed);

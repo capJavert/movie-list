@@ -9,7 +9,7 @@ import * as firebase from "firebase";
 	selector: 'todo-list',
 	templateUrl: './todo-list.template.html'
 })
-export class TodoListComponent implements OnInit{
+export class TodoListComponent implements OnInit {
     private _currentStatus: string;
     public isAuth = false;
     public isLoading = false;
@@ -18,22 +18,24 @@ export class TodoListComponent implements OnInit{
 		this._currentStatus = '';
 	}
 
-	ngOnInit() {
-        firebase.auth().getRedirectResult().then(async () => {
-            if(!!firebase.auth().currentUser) {
-                this.isAuth = true;
-                this.isLoading = true;
+	async ngOnInit() {
+        this.isLoading = true;
 
-                await this.todoStore.list();
+        await firebase.auth().getRedirectResult();
 
-                this.route.params
-                    .map(params => params.status)
-                    .subscribe((status) => {
-                        this._currentStatus = status;
-                        this.isLoading = false;
-                    });
-            }
-        });
+		if(!!firebase.auth().currentUser) {
+			this.isAuth = true;
+
+			await this.todoStore.list();
+
+			await this.route.params
+				.map(params => params.status)
+				.subscribe((status) => {
+					this._currentStatus = status;
+				});
+		}
+
+		this.isLoading = false;
 	}
 
 	login() {
