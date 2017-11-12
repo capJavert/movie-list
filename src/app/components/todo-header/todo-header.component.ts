@@ -2,27 +2,50 @@ import { Component } from '@angular/core';
 
 import { TodoStoreService } from '../../services/todo-store.service';
 import * as firebase from "firebase";
-import {MovieService} from "../../services/movie.service";
+import {ImdbService} from "../../services/imdb.service";
+import {YifyService} from "../../services/yify.service";
+import {WebsiteRef} from "../../models/website-ref";
 
-const URL_PATTERN = new RegExp("(http|https):\\/\\/(www\\.)?imdb\\.com\\/title\\/(.*)\\/.*");
-
+const URL_PATTERNS = {
+    imdb: new RegExp("(http|https):\\/\\/(www\\.)?imdb\\.com\\/title\\/(.*)\\/.*"),
+    yify: new RegExp("(http|https):\\/\\/(www\\.)?yts\\.ag\\/movie\\/(.*)"),
+};
 @Component({
 	selector: 'todo-header',
 	templateUrl: './todo-header.template.html'
 })
 export class TodoHeaderComponent {
 	newTodo = '';
-	constructor(private todoStore:TodoStoreService, private movieService: MovieService) {}
+	constructor(private todoStore:TodoStoreService, private imdbService: ImdbService, private yifyService: YifyService) {}
 
 	addTodo() {
 		if (this.newTodo.trim().length) {
-			if(TodoHeaderComponent.isMovieUrl(this.newTodo)) {
-				let link = this.newTodo;
-				let movieId = TodoHeaderComponent.getMovieId(this.newTodo);
+            let websiteRef = new WebsiteRef();
 
-				this.movieService.get(movieId).subscribe((movie) => {
-                    this.todoStore.addWithLink(movie.title+" ("+movie.year+")", link);
-				});
+            websiteRef.origin = TodoHeaderComponent.isMovieUrl(this.newTodo);
+
+            if(websiteRef.origin) {
+                websiteRef.link = this.newTodo;
+                let movieId = TodoHeaderComponent.getMovieId(this.newTodo, websiteRef.origin);
+
+                switch(websiteRef.origin) {
+					case "imdb":
+						websiteRef.name = "IMDb";
+
+						this.imdbService.get(movieId).subscribe((movie) => {
+							this.todoStore.addWebsiteRef(movie.title+" ("+movie.year+")", websiteRef);
+						});
+						break;
+					case "yify":
+                        websiteRef.name = "YTS";
+
+                        this.yifyService.search(movieId).subscribe((movies) => {
+                        	if(movies.data.movies.length > 0) {
+                                this.todoStore.addWebsiteRef(movies.data.movies[0].title+" ("+movies.data.movies[0].year+")", websiteRef);
+							}
+                        });
+						break;
+				}
 			} else {
                 this.todoStore.add(this.newTodo);
 			}
@@ -36,11 +59,19 @@ export class TodoHeaderComponent {
 	}
 
 	private static isMovieUrl(string: string) {
-        return URL_PATTERN.test(string);
+		for(let origin in URL_PATTERNS) {
+            if (URL_PATTERNS.hasOwnProperty(origin)) {
+                if(URL_PATTERNS[origin].test(string)) {
+                	return origin;
+				}
+            }
+		}
+
+        return false;
 	}
 
-	private static getMovieId(movieUrl: string) {
-        let matcher = URL_PATTERN.exec(movieUrl);
+	private static getMovieId(movieUrl: string, urlOrigin: string) {
+        let matcher = URL_PATTERNS[urlOrigin].exec(movieUrl);
 
 		return matcher[matcher.length-1];
 	}

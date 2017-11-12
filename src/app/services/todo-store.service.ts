@@ -30,9 +30,9 @@ export class TodoStoreService {
                 this.todos = persistedTodos.map((todo) => {
                     let ret = new TodoModel(todo.title);
                     ret.completed = todo.completed;
-                    if(todo.hasOwnProperty('link')) {
-                    	ret.link = todo.link;
-					}
+                    if(todo.hasOwnProperty('websiteRef')) {
+                        ret.websiteRef = todo.websiteRef;
+                    }
                     ret.uid = todo.uid;
                     return ret;
                 });
@@ -99,9 +99,9 @@ export class TodoStoreService {
 		this.persist();
 	}
 
-    addWithLink(title, link) {
+    addWebsiteRef(title, websiteRef) {
 		let todo = new TodoModel(title);
-		todo.link = link;
+		todo.websiteRef = websiteRef;
         this.todos.unshift(todo);
         this.persist();
     }

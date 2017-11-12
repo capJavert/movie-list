@@ -375,24 +375,36 @@ label[for='toggle-all'] {
 .movie-link {
 	margin-top: 30px;
 	font-size: 12px;
-	background: #ffd606;
-	font-weight: 700;
-	color: #000000;
 	border: 1px solid #000000;
 	padding: 1px 1px 1px 2px;
-	border-radius: 2px;
 	cursor: pointer;
 	text-decoration: none;
 }
 
-.movie-link:active,
-.movie-link:hover,
-.movie-link:visited {
+.movie-link-imdb {
+	border-radius: 3px;
+	font-weight: 700;
+	background: #ffd606;
 	color: #000000;
 }
 
- {
+.movie-link-imdb:active,
+.movie-link-imdb:hover,
+.movie-link-imdb:visited {
+	color: #000000;
+}
 
+.movie-link-yify {
+	border-radius: 3px;
+	font-weight: 700;
+	background: #000000;
+	color: rgb(106, 192, 69);
+}
+
+.movie-link-yify:active,
+.movie-link-yify:hover,
+.movie-link-yify:visited {
+	color: rgb(106, 192, 69);
 }
 
 .todo-list li .destroy:hover {

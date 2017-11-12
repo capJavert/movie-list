@@ -1,10 +1,11 @@
 import * as uuid from 'uuid';
+import {WebsiteRef} from "./website-ref";
 
 export class TodoModel {
 	completed;
 	title;
 	uid;
-	link = null;
+    websiteRef: WebsiteRef;
 
 	setTitle(title) {
 		this.title = title.trim();
