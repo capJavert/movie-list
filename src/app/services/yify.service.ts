@@ -6,7 +6,7 @@ import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class YifyService extends MovieService {
-    private baseUrl = "https://yts.ag//api/v2";
+    private baseUrl = "https://yts.am/api/v2";
 
     constructor (private http: Http) {
         super();
