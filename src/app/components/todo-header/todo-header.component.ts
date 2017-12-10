@@ -8,7 +8,7 @@ import {WebsiteRef} from "../../models/website-ref";
 
 const URL_PATTERNS = {
     imdb: new RegExp("(http|https):\\/\\/(www\\.)?imdb\\.com\\/title\\/(.*)\\/.*"),
-    yify: new RegExp("(http|https):\\/\\/(www\\.)?yts\\.ag\\/movie\\/(.*)"),
+    yify: new RegExp("(http|https):\\/\\/(www\\.)?yts\\.am\\/movie\\/(.*)"),
 };
 @Component({
 	selector: 'todo-header',
