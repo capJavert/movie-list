@@ -16,6 +16,7 @@ import { routes } from './routes';
 import {TrimPipe} from "./components/pipes/trim/trim.pipe";
 import {ImdbService} from "./services/imdb.service";
 import {YifyService} from "./services/yify.service";
+import {OmdbService} from "./services/omdb.service";
 
 @NgModule({
 	bootstrap: [AppComponent],
@@ -37,7 +38,7 @@ import {YifyService} from "./services/yify.service";
 	],
 	providers: [
 		TodoStoreService,
-		ImdbService,
+		OmdbService,
 		YifyService
 	]
 })

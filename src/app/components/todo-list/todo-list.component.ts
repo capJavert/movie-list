@@ -51,12 +51,14 @@ export class TodoListComponent implements OnInit {
 	}
 
 	get todos() {
-		if (this._currentStatus === 'completed') {
+		if (this._currentStatus == "oscars") {
+            return this.todoStore.oscars;
+		} else if (this._currentStatus === 'completed') {
 			return this.todoStore.completed;
 		} else if (this._currentStatus === 'active') {
 			return this.todoStore.remaining;
 		} else {
-			return this.todoStore.todos;
+			return this.todoStore.allRegular;
 		}
 	}
 

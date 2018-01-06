@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 import { TodoStoreService } from '../../services/todo-store.service';
 import * as firebase from "firebase";
-import {ImdbService} from "../../services/imdb.service";
 import {YifyService} from "../../services/yify.service";
 import {WebsiteRef} from "../../models/website-ref";
+import {OmdbService} from "../../services/omdb.service";
+import {ActivatedRoute} from "@angular/router";
 
 const URL_PATTERNS = {
     imdb: new RegExp("(http|https):\\/\\/(www\\.)?imdb\\.com\\/title\\/(.*)\\/.*"),
@@ -14,9 +15,25 @@ const URL_PATTERNS = {
 	selector: 'todo-header',
 	templateUrl: './todo-header.template.html'
 })
-export class TodoHeaderComponent {
-	newTodo = '';
-	constructor(private todoStore:TodoStoreService, private imdbService: ImdbService, private yifyService: YifyService) {}
+export class TodoHeaderComponent implements OnInit {
+    private _currentStatus: string;
+    newTodo = '';
+
+	constructor(private todoStore:TodoStoreService,
+				private omdbService: OmdbService,
+				private yifyService: YifyService,
+                private route: ActivatedRoute) {
+
+        this._currentStatus = '';
+	}
+
+    ngOnInit(): void {
+        this.route.params
+            .map(params => params.status)
+            .subscribe((status) => {
+                this._currentStatus = status;
+            });
+    }
 
 	addTodo() {
 		if (this.newTodo.trim().length) {
@@ -32,8 +49,10 @@ export class TodoHeaderComponent {
 					case "imdb":
 						websiteRef.name = "IMDb";
 
-						this.imdbService.get(movieId).subscribe((movie) => {
-							this.todoStore.addWebsiteRef(movie.title+" ("+movie.year+")", websiteRef);
+						this.omdbService.get(movieId).subscribe((movie) => {
+							this.todoStore.addWebsiteRef(
+								movie.title+" ("+movie.year+")", websiteRef,
+								this._currentStatus == "oscars");
 						});
 						break;
 					case "yify":
@@ -41,13 +60,16 @@ export class TodoHeaderComponent {
 
                         this.yifyService.search(movieId).subscribe((movies) => {
                         	if(movies.data.movies.length > 0) {
-                                this.todoStore.addWebsiteRef(movies.data.movies[0].title+" ("+movies.data.movies[0].year+")", websiteRef);
+                                this.todoStore.addWebsiteRef(
+                                	movies.data.movies[0].title+" ("+movies.data.movies[0].year+")", websiteRef,
+									this._currentStatus == "oscars"
+								);
 							}
                         });
 						break;
 				}
 			} else {
-                this.todoStore.add(this.newTodo);
+                this.todoStore.add(this.newTodo, this._currentStatus == "oscars");
 			}
 
 			this.newTodo = '';

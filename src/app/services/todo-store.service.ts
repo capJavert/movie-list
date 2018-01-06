@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
 import * as firebase from "firebase";
-import { TodoModel } from '../models/todo.model';
+import { MovieModel } from '../models/movie.model';
 import "../rxjs.operators";
 import {FirebaseConfig} from "./firebase.config";
+
+const DB_NAME = "todos";
 
 @Injectable()
 export class TodoStoreService {
 	todos = [];
     private remainingTodos = null;
     private completedTodos = null;
+    private oscarsNominatedTodos = null;
     private provider;
 
 	constructor() {
@@ -23,11 +26,11 @@ export class TodoStoreService {
     }
 
     async list() {
-        await firebase.database().ref('todos').once('value', (snapshot) => {
+        await firebase.database().ref(DB_NAME).once('value', (snapshot) => {
             this.loadList(snapshot)
         });
 
-        await firebase.database().ref('todos').on('value', (snapshot) => {
+        await firebase.database().ref(DB_NAME).on('value', (snapshot) => {
             this.loadList(snapshot)
         });
     }
@@ -37,12 +40,20 @@ export class TodoStoreService {
             let persistedTodos = snapshot.val();
 
             this.todos = persistedTodos.map((todo) => {
-                let ret = new TodoModel(todo.title);
+                let ret = new MovieModel(todo.title);
                 ret.completed = todo.completed;
                 if(todo.hasOwnProperty('websiteRef')) {
                     ret.websiteRef = todo.websiteRef;
                 }
                 ret.uid = todo.uid;
+
+                if(todo.hasOwnProperty('isOscarsNominated')) {
+                    ret.isOscarsNominated = todo.isOscarsNominated;
+                } else {
+                	ret.isOscarsNominated = false;
+				}
+
+
                 return ret;
             });
 
@@ -51,7 +62,8 @@ export class TodoStoreService {
 	}
 
 	get(state) {
-		return this.todos.filter((todo) => todo.completed === state.completed);
+		return this.todos.filter((todo) => todo.completed === state.completed
+			&& todo.isOscarsNominated === false);
 	}
 
 	allCompleted() {
@@ -77,11 +89,19 @@ export class TodoStoreService {
 	}
 
 	get completed() {
-		if (!this.completedTodos) {
-			this.completedTodos = this.get({ completed: true });
-		}
+        if (!this.completedTodos) {
+            this.completedTodos = this.get({ completed: true });
+        }
 
-		return this.completedTodos;
+        return this.completedTodos;
+    }
+
+    get oscars() {
+		return this.todos.filter((todo) => todo.isOscarsNominated === true);
+    }
+
+    get allRegular() {
+        return this.todos.filter((todo) => todo.isOscarsNominated === false);
 	}
 
 	toggleCompletion(uid) {
@@ -102,21 +122,24 @@ export class TodoStoreService {
 		}
 	}
 
-	add(title) {
-		this.todos.unshift(new TodoModel(title));
+	add(title, isOscarsNominated) {
+		let todo = new MovieModel(title);
+		todo.isOscarsNominated = isOscarsNominated;
+		this.todos.unshift(todo);
 		this.persist();
 	}
 
-    addWebsiteRef(title, websiteRef) {
-		let todo = new TodoModel(title);
-		todo.websiteRef = websiteRef;
+    addWebsiteRef(title, websiteRef, isOscarsNominated) {
+        let todo = new MovieModel(title);
+        todo.websiteRef = websiteRef;
+        todo.isOscarsNominated = isOscarsNominated;
         this.todos.unshift(todo);
         this.persist();
     }
 
 	persist() {
 		this._clearCache();
-        firebase.database().ref('todos').set(this.todos).then();
+        firebase.database().ref(DB_NAME).set(this.todos).then();
 	}
 
 	_findByUid(uid) {
@@ -126,5 +149,6 @@ export class TodoStoreService {
 	_clearCache() {
 		this.completedTodos = null;
 		this.remainingTodos = null;
+		this.oscarsNominatedTodos = null;
 	}
 }

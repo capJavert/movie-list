@@ -4,6 +4,15 @@ import { Response } from '@angular/http';
 export abstract class MovieService {
     protected static extractData(res: Response) {
         let body = res.json();
+
+        let allPropertyNames = Object.keys(body);
+
+        for (let j=0; j<allPropertyNames.length; j++) {
+            let name = allPropertyNames[j];
+            body[MovieService.lowerCaseFirstLetter(name)] = body[name];
+            delete body[name]
+        }
+
         return body || { };
     }
 
@@ -18,5 +27,9 @@ export abstract class MovieService {
         }
         console.error(errMsg);
         return Observable.throw(errMsg);
+    }
+
+    private static lowerCaseFirstLetter(value: string) {
+        return value[0].toLowerCase() + value.slice(1);
     }
 }
