@@ -9,8 +9,12 @@ export abstract class MovieService {
 
         for (let j=0; j<allPropertyNames.length; j++) {
             let name = allPropertyNames[j];
-            body[MovieService.lowerCaseFirstLetter(name)] = body[name];
-            delete body[name]
+            let lowerCasedName = MovieService.lowerCaseFirstLetter(name);
+
+            if (name !== lowerCasedName) {
+                body[lowerCasedName] = body[name];
+                delete body[name]
+            }
         }
 
         return body || { };
