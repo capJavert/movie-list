@@ -59,11 +59,15 @@ export class TodoHeaderComponent implements OnInit {
                         websiteRef.name = "YTS";
 
                         this.yifyService.search(movieId).subscribe((movies) => {
-                        	if(movies.data.movies.length > 0) {
-                                this.todoStore.addWebsiteRef(
-                                	movies.data.movies[0].title+" ("+movies.data.movies[0].year+")", websiteRef,
-									this._currentStatus == "oscars"
-								);
+                        	if (movies.data.movies) {
+                                let movie = movies.data.movies.find(movie => movie.url == websiteRef.link);
+
+                                if(movie) {
+                                    this.todoStore.addWebsiteRef(
+                                        movie.title+" ("+movie.year+")", websiteRef,
+                                        this._currentStatus == "oscars"
+                                    );
+                                }
 							}
                         });
 						break;
