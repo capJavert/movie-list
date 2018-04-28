@@ -23,7 +23,9 @@ export class TodoFooterComponent implements OnInit{
 	}
 
 	removeCompleted() {
-		this.todoStore.removeCompleted();
+        if (confirm('This will delete all completed movies? Are you sure?')) {
+            this.todoStore.removeCompleted();
+		}
 	}
 
 	getCount() {
