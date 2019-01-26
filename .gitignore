@@ -3,3 +3,5 @@ dist
 .idea
 .DS_Store
 src/app/services/firebase.config.ts
+package-lock.json
+*.log

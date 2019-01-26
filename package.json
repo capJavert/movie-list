@@ -1,6 +1,6 @@
 {
   "name": "movie-list",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/capJavert/movie-list.git"
@@ -35,12 +35,11 @@
     "zone.js": "^0.7.2"
   },
   "devDependencies": {
+    "@angular/cli": "^1.6.0",
     "@angular/compiler": "~2.4.1",
     "@angular/compiler-cli": "~2.4.1",
-    "@angular/cli": "^1.6.0",
-    "@types/jasmine": "^2.5.36",
     "@types/node": "^6.0.46",
     "@types/selenium-webdriver": "^2.53.33",
-    "typescript": "^2.0.10"
+    "typescript": "^2.2.2"
   }
 }

@@ -10,6 +10,9 @@
         <li>
             <a [routerLink]="['', 'completed']" [class.selected]="currentStatus == 'completed'">Completed</a>
         </li>
+        <li>	
+            <a [routerLink]="['', 'oscars']" [class.selected]="currentStatus == 'oscars'">Oscars 2019</a>
+        </li>
     </ul>
     <button class="clear-completed" *ngIf="hasCompleted()" (click)="removeCompleted()">Clear completed</button>
 </footer>
